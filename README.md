@@ -11,7 +11,7 @@ Please help me test and reccomend new features you'd like to see! [Create an iss
 Do contact me if you want any help with this!
 
 ## config.js
-You will need a [Strava API client id and client secret](https://www.strava.com/settings/api), and [MapQuest key](https://developer.mapquest.com/user/me/apps). `config.js` should then be:
+You will need a [Strava API client id and client secret](https://www.strava.com/settings/api), and [MapQuest key](https://developer.mapquest.com/user/me/apps). When you create your strava client, the Authorisation Callback Domain should be `strava.com`. `config.js` should then be:
 ```
 const map_key = "mapquest key"
 const secret = "strava client secret"
