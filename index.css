@@ -1,0 +1,86 @@
+body {
+    margin: 0;
+    overflow-x: hidden; /* hide x scrollbar */
+}
+
+header {
+    color: white;
+    background-color: #fc4c02;
+    padding: 3px;
+    position: sticky;
+    top: 0;
+}
+header h3 {
+    margin: 0;
+}
+header img {
+    height: 30px;
+    width: 30px;
+}
+
+:focus {
+    border: 1px solid red;
+}
+
+.page {
+    width: 240px;
+    position: absolute;
+}
+
+img.map {
+    position: absolute;
+    left: 0;
+}
+img.map.recording {
+    top: 124px;
+}
+img.map.prerecord {
+    top: 31px;
+}
+
+footer.softkey-cont {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 240px;
+    display: none;
+    text-align: center;
+    z-index: 2
+}
+.active footer.softkey-cont {
+    display: block;
+}
+footer.softkey-cont span {
+    background-color: rgba(200, 200, 200, 1);
+}
+footer.softkey-cont span.left {
+    border-top-right-radius: 13px;
+    float: left;
+    padding-left: 2px;
+    padding-right: 7px;
+}
+footer.softkey-cont span.center {
+    border-top-left-radius: 13px;
+    border-top-right-radius: 13px;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+footer.softkey-cont span.right {
+    border-top-left-radius: 13px;
+    float: right;
+    padding-left: 7px;
+    padding-right: 2px;
+}
+
+.activity h4 {
+    margin-bottom: 0;
+}
+
+table.stats {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+.dist, .time {
+    font-size: 50px;
+}
