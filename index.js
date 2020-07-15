@@ -223,7 +223,7 @@ function gpsPoint(point){
     const time = Math.round(Date.now()/1000)
 
 
-    if( lastLat == 0 || distance(lastLat, lastLon, lat, lon) > 1){
+    if( lastLat == 0 || distance(lastLat, lastLon, lat, lon) > 1){ // if it's the first time or we have moved
 
         let pointsEnc = get('points')
         const first = pointsEnc.length == 0
@@ -231,7 +231,9 @@ function gpsPoint(point){
         set('points', pointsEnc)
 
         let timesEnc = get('times')
-        timesEnc += compressTime(lastTime, time)
+        if(!first){ // we don't store the first time point
+            timesEnc += compressTime(lastTime, time)
+        }
         set('times', timesEnc)
 
         console.log('point saved. points len', pointsEnc.length, 'times len', timesEnc.length)
@@ -252,7 +254,6 @@ function gpsPoint(point){
                 console.log("in first mL", maxLat)
             } else {
                 const d = distance(lastLat, lastLon, lat, lon)
-                console.log(d)
                 dist += d
                 set('dist', dist)
             }
@@ -276,12 +277,12 @@ function gpsPoint(point){
 
         lastLat = lat
         lastLon = lon
+        lastTime = Math.round(Date.now() / 1000)
 
         $(".dist").text(formatDist(dist))
     } else {
         console.log("ignoring point")
     }
-    lastTime = Math.round(Date.now() / 1000)
 }
 
 document.addEventListener("visibilitychange", function() {
@@ -364,7 +365,8 @@ function makeUpload(){
     setState('')
 
     const points = decompressPoints(get('points'))
-    const times = decompressTimes(get('times'))
+    const times = decompressTimes(parseInt(get('startTime')), get('times')) // add back the first time point
+    console.log(points, times)
         
     const xml = document.implementation.createDocument("", "", null);
     
@@ -380,7 +382,7 @@ function makeUpload(){
         trkpt.setAttribute('lat', points[i].lat);
         trkpt.setAttribute('lon', points[i].lon);
         const timeElem = xml.createElement('time');
-        const time = new Date(times[i]);
+        const time = new Date(times[i]*1000);
         timeElem.textContent = time.toISOString();
         trkpt.appendChild(timeElem);
         trkseg.appendChild(trkpt);
@@ -536,7 +538,7 @@ function compressPoint(lat1, lon1, lat2, lon2) {
 function compressTime(t1, t2){
     return encodeNumber(t2 - t1)
 }
- 
+
 function encodeNumber(num) {
     var num = num << 1;
     if (num < 0) {
@@ -581,8 +583,8 @@ function decompressPoints(encoded) {
     return array;
 }
 
-function decompressTimes(encoded){
-    var len = encoded.length, index=0, time=0, array = [];
+function decompressTimes(firstTime, encoded){
+    var len = encoded.length, index=0, time=firstTime, array = [firstTime];
     while (index < len) {
         var b, shift = 0, result = 0;
         do {
