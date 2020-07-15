@@ -1,6 +1,6 @@
 # KaiStra - a Strava client for KaiOS
 
-Please help me test and reccomend new features you'd like to see! So far only tested on an 8110.
+Please help me test and reccomend new features you'd like to see! [Create an issue](https://github.com/UltrasonicNXT/KaiStra/issues/new). So far only tested on an 8110.
 
 ## Installation
  - Follow the KaiOS 'OS ENV Setup' instructions (install Firefox 59 and ADB)
