@@ -165,38 +165,24 @@ function start(){
     console.log("start() called")
 
     const loadState = getState()
-    if(loadState == 'recording'){
-        console.log("restoring state recording")
-        
-        //const points = decompressPoints(get('points'))
-        //const times = decompressTimes(get('times'))
+    if(loadState == 'recording' || loadState == 'paused'){
+        console.log("restoring recording")
 
         startTime = parseInt(get('startTime'))
         dist = parseInt(get('dist'))
         
-        maxLat = parseFloat(get('maxLat'))
-        minLat = parseFloat(get('minLat'))
-        maxLon = parseFloat(get('maxLon'))
-        minLon = parseFloat(get('minLon'))
-
-        startGPS()
-        setState('recording')
-
+        [maxLat, maxLon, minLat, minLon] = extractMaxMins(get('points'))
+    
         app.nav(recording, false)
-        recordingKeysActive()
-        startGPS()
-    } else if(loadState == 'paused'){
-        console.log("recording state paused")
-        app.nav(recording, false)
-        recordingKeysPaused()
-        
-        startTime = parseInt(get('startTime'))
-        dist = parseInt(get('dist'))
-        
-        maxLat = parseFloat(get('maxLat'))
-        minLat = parseFloat(get('minLat'))
-        maxLon = parseFloat(get('maxLon'))
-        minLon = parseFloat(get('minLon'))
+
+        if(loadState == 'recording'){
+            startGPS()
+            setState('recording')
+            recordingKeysActive()
+            startGPS()
+        } else { // paused
+            recordingKeysPaused()
+        }
         
     } else {
         loadHome()
@@ -250,10 +236,6 @@ function gpsPoint(point){
         if(first){
             // first ever point
             statusP.text("gps aquired")
-            set('maxLat', lat)
-            set('minLat', lat)
-            set('maxLon', lon)
-            set('minLon', lon)
             maxLat = lat
             minLat = lat
             maxLon = lon
@@ -274,19 +256,15 @@ function gpsPoint(point){
 
             if(lat > maxLat){
                 maxLat = lat
-                set('maxLat', lat)
             }
             if(lat < minLat){
                 minLat = lat
-                set('minLat', lat)
             }
             if(lon > maxLon){
                 maxLon = lon
-                set('maxLon', lon)
             }
             if(lon < minLon){
                 minLon = lon
-                set('minLon', lon)
             }
         }
 
