@@ -34,7 +34,8 @@ const app = new PagedApp()
 
 const home = app.newPage()
 let header = $("<header />").append($("<h3 />").text("Your activities"))
-home.append(header)
+const activities = $("<div />")
+home.append(header).append(activities)
 
 const preRecord = app.newPage()
 header = $("<header />").append($("<h3 />").text("Start recording"))
@@ -193,6 +194,8 @@ function loadHome(){
     refreshIfNeeded(() => {
         $.ajax(api_url + '/athlete/activities', {beforeSend: add_header, data: {per_page: 5}})
         .done(function(data){
+            activities.empty()
+        
             console.log(data)
             for(var activity of data){
                 const div = $("<div />").addClass('activity')
@@ -206,7 +209,7 @@ function loadHome(){
                 const map = activity.map.summary_polyline
                 loadMap_internal(actImg, ...extractMaxMins(map), map)
                 
-                home.append(div)
+                activities.append(div)
             }
         })
         .fail(error)
@@ -427,6 +430,11 @@ function checkUpload(id){
         if(data.status == "Your activity is ready."){
             alert(data.status)
             app.nav(home)
+            loadHome()
+        } else if(data.status == "There was an error processing your activity."){
+            alert(data.status + data.error)
+            app.nav(home)
+            loadHome()
         } else {
             upload.append(data.status)
             setTimeout(checkUpload, 1000, id)
