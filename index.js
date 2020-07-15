@@ -450,7 +450,7 @@ function checkUpload(id){
             alert(data.status)
             app.nav(home)
         } else {
-            upload.html(data.status)
+            upload.append(data.status)
             setTimeout(checkUpload, 1000, id)
         }
     })
