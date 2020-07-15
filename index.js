@@ -635,8 +635,11 @@ function extractMaxMins(encoded){
 }
 
 function formatDist(d){
-    if(d < 100){
+    if(d < 1000){
         return Math.round(d) + "m"
+    } else if (d < 10*1000){
+        d = d/1000
+        return d.toPrecision(2) + "km"
     } else {
         d = d/1000
         return d.toPrecision(3) + "km"
