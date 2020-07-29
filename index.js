@@ -361,10 +361,6 @@ function abandonRecording(){
     set('points', '')
     set('dist', 0)
     set('startTime', 0)
-    set('maxLat', '')
-    set('minLat', '')
-    set('maxLon', '')
-    set('minLon', '')
     img0.attr('src', '')
     img.attr('src', '')
 }
@@ -401,12 +397,10 @@ function makeUpload(){
     const fileblob = new Blob([res], {type: "text/plain"});
     const filename =  "gps-" + Date.now().toString() + ".gpx"
 
-    abandonRecording()
-
     refreshIfNeeded( () => {
         const d  = new FormData()
-        d.set('name', name.text())
-        d.set('description', desc.text())
+        d.set('name', name.val())
+        d.set('description', desc.val())
         d.set('trainer', trainer.is(":checked"))
         d.set('commute', commute.is(":checked"))
         d.set('data_type', 'gpx')
@@ -422,12 +416,12 @@ function makeUpload(){
             method: 'POST'
         })
         .done(function(data){
+            abandonRecording()
+
             console.log(data)
             if(data.error == null){
                 checkUpload(data.id)
             }
-            //$(".user-name").text(data.firstname + " " + data.lastname)
-            //$("header img").attr('src', data.profile)
         })
         .fail(error)
     })
