@@ -13,7 +13,7 @@ class Page {
             label: '',
             fn: () => {}
         }
-        this.back = () => {}
+        this.back = undefined
         this.active = false
 
         this.div = $("<div />").addClass('page')
@@ -80,11 +80,11 @@ class PagedApp {
                 this.move(1);
                 break;
             case 'Backspace':
-                if(this.active != 0){
+                if(this.pages[this.active].back != undefined){
                     e.preventDefault()
                     e.stopPropagation()
+                    this.pages[this.active].back()
                 }
-                this.pages[this.active].back()
                 break
             case 'ArrowLeft':
             case 'ArrowRight':

@@ -95,10 +95,12 @@ preRecord.center = {
 }
 
 function recordingKeysActive(){
-    resumeRecording()
     recording.center = {
         label: 'pause',
-        fn: recordingKeysPaused
+        fn: () => {
+            recordingKeysPaused()
+            pauseRecording()
+        }
     }
     recording.softLeft = { label: '', fn: () => {} }
     recording.softRight = { label: '', fn: () => {} }
@@ -106,10 +108,12 @@ function recordingKeysActive(){
 }
 
 function recordingKeysPaused(){
-    pauseRecording()
     recording.center = {
         label: 'resume',
-        fn: recordingKeysActive
+        fn: () => {
+            recordingKeysActive()
+            resumeRecording()
+        }
     }
     recording.softLeft = {
         label: 'abandon',
@@ -129,7 +133,10 @@ function recordingKeysPaused(){
 
 recording.center = {
     label: 'pause',
-    fn: recordingKeysPaused
+    fn: () => {
+        recordingKeysPaused()
+        pauseRecording()
+    }
 }
 
 postRecord.softRight = {
@@ -180,7 +187,7 @@ function start(){
             startGPS()
             setState('recording')
             recordingKeysActive()
-            startGPS()
+            //startGPS()
         } else { // paused
             recordingKeysPaused()
         }
@@ -317,6 +324,7 @@ function loadMap_internal(image, maxLat, maxLon, minLat, minLon, pointsEnc, size
 function startGPS(){
     gps_lock = window.navigator.requestWakeLock('gps');
     gps_id = navigator.geolocation.watchPosition(gpsPoint, () => {}, gpsOptions);
+    console.log("out startGPS")
 }
 
 function stopGPS(){
